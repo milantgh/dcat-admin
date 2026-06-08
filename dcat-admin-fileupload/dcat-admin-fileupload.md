@@ -171,9 +171,6 @@ resulting in remote command execution and ultimately server takeover
     validation logic contains critical flaws that lead to the arbitrary
     file upload vulnerability.
 
-```{=html}
-<!-- -->
-```
 1.  Lack of Core Validation: File Suffix/Type Blacklist Only Defined
     Frontend, No Unified Backend Filtering
 
