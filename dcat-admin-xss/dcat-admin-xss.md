@@ -34,14 +34,12 @@ Release Page: <https://github.com/jqhph/dcat-admin/releases/tag/1.7.8>
 The details of affected versions and vulnerable interfaces are as
 follows:
 
-![](images/media/image1.png){width="5.758333333333334in"
-height="2.8895833333333334in"}
+![](images/media/image1.png)
 
 http://192.168.1.3/admin/auth/login，The username and password are both
 admin.
 
-![](images/media/image2.png){width="5.761805555555555in"
-height="2.785416666666667in"}
+![](images/media/image2.png)
 
 Vulnerable Version: Powered by Dcat Admin·v1.7.8
 
@@ -49,8 +47,7 @@ After logging into the system successfully, you can see the version
 number of the vulnerable system at the bottom of the page, as shown in
 the figure:
 
-![版本](images/media/image3.png){width="5.764583333333333in"
-height="2.95625in"}
+![版本](images/media/image3.png)
 
 The vulnerable interfaces are listed below:
 
@@ -86,73 +83,57 @@ The vulnerable interfaces are listed below:
 
     Vulnerable Interface 1: <http://192.168.1.3/admin/auth/users>
 
-![](images/media/image4.png){width="5.766666666666667in"
-height="2.2944444444444443in"}
+![](images/media/image4.png)
 
-![](images/media/image5.png){width="5.758333333333334in"
-height="2.6618055555555555in"}
+![](images/media/image5.png)
 
 Vulnerable Interface 2：<http://192.168.1.3/admin/auth/setting>
 
-![](images/media/image6.png){width="5.758333333333334in"
-height="2.95in"}
+![](images/media/image6.png)
 
-![](images/media/image7.png){width="5.758333333333334in"
-height="2.9652777777777777in"}
+![](images/media/image7.png)
 
 Proof of Concept Procedures are as follows:
 
 Vulnerable Interface 1：<http://192.168.1.3/admin/auth/users>
 
-![捕获](images/media/image8.png){width="5.758333333333334in"
-height="2.9319444444444445in"}
+![捕获](images/media/image8.png)
 
-![](images/media/image9.png){width="5.758333333333334in"
-height="2.4131944444444446in"}
+![](images/media/image9.png)
 
-![](images/media/image10.png){width="5.760416666666667in"
-height="2.422222222222222in"}
+![](images/media/image10.png)
 
-![](images/media/image11.png){width="5.758333333333334in"
-height="2.404861111111111in"}
+![](images/media/image11.png)
 
 <http://localhost/storage/images/c86523cde1c678a1573f3962db22ca9e.svg>
 
 Payload：\<svg xmlns=\"http://www.w3.org/2000/svg\"
 onload=\"alert(1)\"\>\</svg\>
 
-![](images/media/image12.png){width="5.758333333333334in"
-height="1.9868055555555555in"}
+![](images/media/image12.png)
 
-![](images/media/image13.png){width="5.754166666666666in"
-height="2.683333333333333in"}
+![](images/media/image13.png)
 
 <http://localhost/storage/images/ceefcc4c4f628bb33059344f8f0cf2a4.html>
 
 Vulnerable Interface 2：<http://192.168.1.3/admin/auth/setting>
 
-![上传截图](images/media/image14.png){width="5.760416666666667in"
-height="2.939583333333333in"}
+![上传截图](images/media/image14.png)
 
-![头像上传-正常](images/media/image15.png){width="5.758333333333334in"
-height="3.2645833333333334in"}
+![头像上传-正常](images/media/image15.png)
 
-![头像上传-正常-2](images/media/image16.png){width="5.767361111111111in"
-height="3.189583333333333in"}
+![头像上传-正常-2](images/media/image16.png)
 
-![](images/media/image17.png){width="5.761111111111111in"
-height="2.2979166666666666in"}
+![](images/media/image17.png)
 
 <http://localhost/storage/images/1.svg>
 
 Payload：\<svg xmlns=\"http://www.w3.org/2000/svg\"
 onload=\"alert(1)\"\>\</svg\>
 
-![](images/media/image18.png){width="5.758333333333334in"
-height="2.691666666666667in"}
+![](images/media/image18.png)
 
-![](images/media/image19.png){width="5.767361111111111in"
-height="2.201388888888889in"}
+![](images/media/image19.png)
 
 [http://localhost/storage/images/1.html](http://localhost/storage/images/ceefcc4c4f628bb33059344f8f0cf2a4.html)
 
@@ -162,11 +143,9 @@ as shown in the figure.
 Storage
 Directory:D:\\phpstudy_pro\\WWW\\dcat-admin\\storage\\app\\public\\images
 
-![](images/media/image20.png){width="5.766666666666667in"
-height="3.0541666666666667in"}
+![](images/media/image20.png)
 
-![](images/media/image21.png){width="5.761805555555555in"
-height="3.0875in"}
+![](images/media/image21.png)
 
 Next, navigate to the project root directory (not the public folder; the
 path is D:\\phpstudy_pro\\WWW\\dcat-admin). Run the command php artisan
@@ -175,17 +154,14 @@ the uploaded files can be accessed directly via a web browser. This
 configuration is adopted by nearly all websites for business
 requirements, as shown in the figure.
 
-![](images/media/image22.png){width="5.761805555555555in"
-height="1.0819444444444444in"}
+![](images/media/image22.png)
 
 Next, access the SVG script file via a web browser to trigger JavaScript
 code execution, as shown in the figure.
 
-![](images/media/image12.png){width="5.758333333333334in"
-height="1.9868055555555555in"}
+![](images/media/image12.png)
 
-![](images/media/image18.png){width="5.758333333333334in"
-height="2.691666666666667in"}
+![](images/media/image18.png)
 
 3.Code Audit Analysis
 
@@ -264,22 +240,16 @@ code, bypassing all validation.
 
 D:\\phpstudy_pro\\WWW\\dcat-admin\\vendor\\dcat\\laravel-admin\\src\\Traits\\HasUploadedFile.php
 
-![](images/media/image23.png){width="5.763194444444444in"
-height="3.3868055555555556in"}
+![](images/media/image23.png)
 
 D:\\phpstudy_pro\\WWW\\dcat-admin\\vendor\\dcat\\laravel-admin\\src\\Form\\Field\\UploadField.php
 
-![](images/media/image24.png){width="5.759722222222222in"
-height="3.95in"}
+![](images/media/image24.png)
 
-![](images/media/image25.png){width="5.758333333333334in"
-height="2.89375in"}
+![](images/media/image25.png)
 
-![](images/media/image26.png){width="5.758333333333334in"
-height="2.9402777777777778in"}
+![](images/media/image26.png)
 
-![](images/media/image27.png){width="5.758333333333334in"
-height="2.915277777777778in"}
+![](images/media/image27.png)
 
-![](images/media/image28.png){width="5.758333333333334in"
-height="2.923611111111111in"}
+![](images/media/image28.png)

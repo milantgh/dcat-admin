@@ -34,14 +34,12 @@ Release Page: <https://github.com/jqhph/dcat-admin/releases/tag/1.7.8>
 The details of affected versions and vulnerable interfaces are as
 follows:
 
-![](images/media/image1.png){width="5.758333333333334in"
-height="2.8895833333333334in"}
+![](images/media/image1.png)
 
 http://192.168.1.3/admin/auth/login，The username and password are both
 admin.
 
-![](images/media/image2.png){width="5.761805555555555in"
-height="2.785416666666667in"}
+![](images/media/image2.png)
 
 Vulnerable Version: Powered by Dcat Admin·v1.7.8
 
@@ -49,8 +47,7 @@ After logging into the system successfully, you can see the version
 number of the vulnerable system at the bottom of the page, as shown in
 the figure:
 
-![版本](images/media/image3.png){width="5.764583333333333in"
-height="2.95625in"}
+![版本](images/media/image3.png)
 
 The vulnerable interfaces are listed below:
 
@@ -88,54 +85,41 @@ Rules of the system\'s suffix blacklist check are as follows:
 
 Vulnerable Interface 1: <http://192.168.1.3/admin/auth/users>
 
-![](images/media/image4.png){width="5.766666666666667in"
-height="2.2944444444444443in"}
+![](images/media/image4.png)
 
-![](images/media/image5.png){width="5.758333333333334in"
-height="2.6618055555555555in"}
+![](images/media/image5.png)
 
 Vulnerable Interface 2:<http://192.168.1.3/admin/auth/setting>
 
-![](images/media/image6.png){width="5.758333333333334in"
-height="2.95in"}
+![](images/media/image6.png)
 
-![](images/media/image7.png){width="5.758333333333334in"
-height="2.9652777777777777in"}
+![](images/media/image7.png)
 
 Proof of Concept Procedures are as follows:
 
 Vulnerable Interface 1：<http://192.168.1.3/admin/auth/users>
 
-![捕获](images/media/image8.png){width="5.758333333333334in"
-height="2.9319444444444445in"}
+![捕获](images/media/image8.png)
 
-![](images/media/image9.png){width="5.758333333333334in"
-height="2.4131944444444446in"}
+![](images/media/image9.png)
 
-![](images/media/image10.png){width="5.760416666666667in"
-height="2.422222222222222in"}
+![](images/media/image10.png)
 
-![](images/media/image11.png){width="5.75625in"
-height="2.598611111111111in"}
+![](images/media/image11.png)
 
-![](images/media/image12.png){width="5.758333333333334in"
-height="2.657638888888889in"}
+![](images/media/image12.png)
 
 <http://localhost/storage/images/42d87dc69d2870a85f4d934c9d1a8fe8.pht>
 
 Vulnerable Interface 2：<http://192.168.1.3/admin/auth/setting>
 
-![上传截图](images/media/image13.png){width="5.760416666666667in"
-height="2.939583333333333in"}
+![上传截图](images/media/image13.png)
 
-![头像上传-正常](images/media/image14.png){width="5.758333333333334in"
-height="3.2645833333333334in"}
+![头像上传-正常](images/media/image14.png)
 
-![头像上传-正常-2](images/media/image15.png){width="5.767361111111111in"
-height="3.189583333333333in"}
+![头像上传-正常-2](images/media/image15.png)
 
-![头像上传-pht](images/media/image16.png){width="5.759027777777778in"
-height="3.3020833333333335in"}
+![头像上传-pht](images/media/image16.png)
 
 Summary: The following file types can be uploaded (see figure): .pht and
 other extensions.
@@ -143,11 +127,9 @@ other extensions.
 Storage
 Directory:D:\\phpstudy_pro\\WWW\\dcat-admin\\storage\\app\\public\\images
 
-![](images/media/image17.png){width="5.766666666666667in"
-height="3.0541666666666667in"}
+![](images/media/image17.png)
 
-![](images/media/image18.png){width="5.761805555555555in"
-height="3.0875in"}
+![](images/media/image18.png)
 
 Next, navigate to the project root directory (not the public folder; the
 path is D:\\phpstudy_pro\\WWW\\dcat-admin). Run the command php artisan
@@ -156,21 +138,17 @@ the uploaded files can be accessed directly via a web browser. This
 configuration is adopted by nearly all websites for business
 requirements, as shown in the figure.
 
-![](images/media/image19.png){width="5.761805555555555in"
-height="1.0819444444444444in"}
+![](images/media/image19.png)
 
-![](images/media/image20.png){width="5.758333333333334in"
-height="2.379166666666667in"}
+![](images/media/image20.png)
 
 Next, use a webshell management tool to access the PHP script file. The
 Apache server parses the file as a PHP script, enabling arbitrary code
 execution and gaining full server privileges, as shown in the figure.
 
-![webshell](images/media/image21.png){width="5.760416666666667in"
-height="2.727777777777778in"}
+![webshell](images/media/image21.png)
 
-![webshell2](images/media/image22.png){width="5.758333333333334in"
-height="2.645138888888889in"}
+![webshell2](images/media/image22.png)
 
 The .pht extension is an executable file type natively supported by
 Apache and PHP, yet its risks are often overlooked. If a website only
@@ -261,22 +239,16 @@ resulting in remote command execution and ultimately server takeover
 
     D:\\phpstudy_pro\\WWW\\dcat-admin\\vendor\\dcat\\laravel-admin\\src\\Traits\\HasUploadedFile.php
 
-    ![](images/media/image23.png){width="5.763194444444444in"
-    height="3.3868055555555556in"}
+    ![](images/media/image23.png)
 
     D:\\phpstudy_pro\\WWW\\dcat-admin\\vendor\\dcat\\laravel-admin\\src\\Form\\Field\\UploadField.php
 
-    ![](images/media/image24.png){width="5.759722222222222in"
-    height="3.95in"}
+    ![](images/media/image24.png)
 
-    ![](images/media/image25.png){width="5.758333333333334in"
-    height="2.89375in"}
+    ![](images/media/image25.png)
 
-    ![](images/media/image26.png){width="5.758333333333334in"
-    height="2.9402777777777778in"}
+    ![](images/media/image26.png)
 
-    ![](images/media/image27.png){width="5.758333333333334in"
-    height="2.915277777777778in"}
+    ![](images/media/image27.png)
 
-    ![](images/media/image28.png){width="5.758333333333334in"
-    height="2.923611111111111in"}
+    ![](images/media/image28.png)
