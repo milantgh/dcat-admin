@@ -160,92 +160,88 @@ Simply accessing these files will trigger arbitrary PHP code execution,
 resulting in remote command execution and ultimately server takeover
 (getshell).
 
-3.  Code Audit Analysis
+3.Code Audit Analysis
 
-    Next, we analyze the root cause of the vulnerability through source
-    code. In fact, the file upload vulnerability originates from the
-    UploadField.php trait. Below is the complete code-level analysis.
+Next, we analyze the root cause of the vulnerability through source
+code. In fact, the file upload vulnerability originates from the
+UploadField.php trait. Below is the complete code-level analysis.
 
-    The UploadField trait is the core implementation for all file upload
-    fields in Dcat Admin (including avatars and attachments). Its
-    validation logic contains critical flaws that lead to the arbitrary
-    file upload vulnerability.
+The UploadField trait is the core implementation for all file upload
+fields in Dcat Admin (including avatars and attachments). Its
+validation logic contains critical flaws that lead to the arbitrary
+file upload vulnerability.
 
-1.  Lack of Core Validation: File Suffix/Type Blacklist Only Defined
-    Frontend, No Unified Backend Filtering
+1\. Lack of Core Validation: File Suffix/Type Blacklist Only Defined Frontend, No Unified Backend Filtering
 
-    \$this-\>getRules() retrieves validation rules defined by specific
-    field classes (e.g., Image/File), not unified validation within the
-    UploadField trait.
+\$this-\>getRules() retrieves validation rules defined by specific
+field classes (e.g., Image/File), not unified validation within the
+UploadField trait.
 
-    For image fields like avatars, rules are typically image or
-    mimes:jpeg,png, which rely on Laravel\'s Validator.
+For image fields like avatars, rules are typically image or
+mimes:jpeg,png, which rely on Laravel\'s Validator.
 
-    This only verifies the file MIME type, not the actual file content
-    or suffix.
+This only verifies the file MIME type, not the actual file content
+or suffix.
 
-    Attackers can upload files with a forged image/png MIME type and a
-    .pht suffix to bypass image validation directly.
+Attackers can upload files with a forged image/png MIME type and a
+.pht suffix to bypass image validation directly.
 
-    The UploadField itself has no blacklist filtering for executable
-    suffixes such as .pht, nor any global suffix validation logic.
+The UploadField itself has no blacklist filtering for executable
+suffixes such as .pht, nor any global suffix validation logic.
 
-2.  Filename Generation Directly Uses Client-Submitted Suffix Without
-    Rewriting
+2\. Filename Generation Directly Uses Client-Submitted Suffix Without Rewriting
 
-    \$file-\>getClientOriginalExtension() directly fetches the
-    client-submitted file extension.
+\$file-\>getClientOriginalExtension() directly fetches the
+client-submitted file extension.
 
-    The backend does not rewrite the suffix with a whitelist (e.g.,
-    force it to .png).
+The backend does not rewrite the suffix with a whitelist (e.g.,
+force it to .png).
 
-    This allows attackers to retain executable suffixes like .pht.
+This allows attackers to retain executable suffixes like .pht.
 
-    For example: even if uploading shell.png.pht, the backend preserves
-    the full suffix and writes the file without any secure modification.
+For example: even if uploading shell.png.pht, the backend preserves
+the full suffix and writes the file without any secure modification.
 
-3.  Upload Storage Logic Has No Filtering, Writes Directly to Publicly
-    Accessible Directory
+3\. Upload Storage Logic Has No Filtering, Writes Directly to Publicly Accessible Directory
 
-    putFileAs writes the file directly to the directory returned by
-    \$this-\>getDirectory() without any secondary content inspection.
+putFileAs writes the file directly to the directory returned by
+\$this-\>getDirectory() without any secondary content inspection.
 
-    The directory path is defined by the field class; avatar files are
-    written to storage/app/public/images by default.
+The directory path is defined by the field class; avatar files are
+written to storage/app/public/images by default.
 
-    This directory becomes publicly accessible via the web after
-    creating a symbolic link with php artisan storage:link.
+This directory becomes publicly accessible via the web after
+creating a symbolic link with php artisan storage:link.
 
-    Uploaded PHP script files are parsed and executed by Apache,
-    directly triggering remote code execution.
+Uploaded PHP script files are parsed and executed by Apache,
+directly triggering remote code execution.
 
-4.  No File Content Validation, Supports Image Header + PHP Mixed Files
+4\. No File Content Validation, Supports Image Header + PHP Mixed Files
 
-    UploadField only relies on Laravel\'s validator image rule, which
-    only checks the MIME type and basic image structure, not deep
-    content parsing.
+UploadField only relies on Laravel\'s validator image rule, which
+only checks the MIME type and basic image structure, not deep
+content parsing.
 
-    Attackers can upload mixed files with a valid PNG image header + PHP
-    code (e.g., PNG + \<?php \@eval(\$\_POST\[\'cmd\'\]);?\>).
+Attackers can upload mixed files with a valid PNG image header + PHP
+code (e.g., PNG + \<?php \@eval(\$\_POST\[\'cmd\'\]);?\>).
 
-    The backend recognizes it as a valid image and writes it to the
-    server.
+The backend recognizes it as a valid image and writes it to the server.
 
-    Apache parses the file by its suffix and executes the PHP code,
-    bypassing all validation.
+Apache parses the file by its suffix and executes the PHP code,
+bypassing all validation.
 
-    D:\\phpstudy_pro\\WWW\\dcat-admin\\vendor\\dcat\\laravel-admin\\src\\Traits\\HasUploadedFile.php
+D:\\phpstudy_pro\\WWW\\dcat-admin\\vendor\\dcat\\laravel-admin\\src\\Traits\\HasUploadedFile.php
 
-    ![](images/media/image23.png)
+![](images/media/image23.png)
 
-    D:\\phpstudy_pro\\WWW\\dcat-admin\\vendor\\dcat\\laravel-admin\\src\\Form\\Field\\UploadField.php
+D:\\phpstudy_pro\\WWW\\dcat-admin\\vendor\\dcat\\laravel-admin\\src\\Form\\Field\\UploadField.php
 
-    ![](images/media/image24.png)
+![](images/media/image24.png)
 
-    ![](images/media/image25.png)
+![](images/media/image25.png)
 
-    ![](images/media/image26.png)
+![](images/media/image26.png)
 
-    ![](images/media/image27.png)
+![](images/media/image27.png)
 
-    ![](images/media/image28.png)
+![](images/media/image28.png)
